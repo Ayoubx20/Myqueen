@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#ff4d6d">
+    <title>Late Apology Upgrade 2.0 💖</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, -apple-system, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow-x: hidden;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            /* Changed from center to flex-start */
+            overflow-y: auto;
+            /* Allow body scrolling */
+            transition: background 1.5s ease;
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            padding: 20px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 430px;
+            min-height: 100vh;
+            /* Allow container to be taller than viewport */
+            gap: 20px;
+            padding-top: constant(safe-area-inset-top);
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: constant(safe-area-inset-bottom);
+            padding-bottom: env(safe-area-inset-bottom);
+            margin-top: 20px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.98);
+            padding: 30px 25px;
+            border-radius: 30px;
+            width: 100%;
+            max-width: 390px;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.15);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            text-align: center;
+            z-index: 10;
+            position: relative;
+            overflow: visible;
+            /* Changed from hidden to visible */
+            margin-top: max(20px, env(safe-area-inset-top));
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: linear-gradient(90deg, #ff4d6d, #ff9a9e, #ff758c);
+        }
+
+        h1 {
+            color: #ff4d6d;
+            margin-bottom: 15px;
+            font-size: 2.2rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            letter-spacing: -0.5px;
+        }
+
+        p {
+            color: #333;
+            font-size: 1.15rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+            width: 100%;
+        }
+
+        button {
+            padding: 18px 25px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            -webkit-appearance: none;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        button:active {
+            transform: scale(0.97);
+        }
+
+        #yesBtn {
+            background: linear-gradient(to right, #ff4d6d, #ff8fa3);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.3);
+        }
+
+        #yesBtn:active {
+            transform: scale(0.97);
+            box-shadow: 0 5px 20px rgba(255, 77, 109, 0.4);
+        }
+
+        #noBtn {
+            background: #f8f9fa;
+            color: #666;
+            position: relative;
+            border: 2px solid #e9ecef;
+        }
+
+        #noBtn:active {
+            background: #e9ecef;
+            transform: scale(0.97);
+        }
+
+        /* FIXED: Final message with scroll */
+        .final-message {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.5);
+            background: rgba(255, 255, 255, 0.98);
+            padding: 35px 25px;
+            border-radius: 30px;
+            width: calc(100% - 40px);
+            max-width: 390px;
+            max-height: 85vh;
+            /* Limit height */
+            text-align: center;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.25);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1000;
+            -webkit-backdrop-filter: blur(30px);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            overflow-y: auto;
+            /* Make it scrollable */
+            overflow-x: hidden;
+            overscroll-behavior: contain;
+            /* Prevent scroll chaining */
+        }
+
+        .final-message.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .final-message h2 {
+            color: #ff4d6d;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            font-weight: 800;
+        }
+
+        .upgrade-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .upgrade-item {
+            background: #fff5f7;
+            padding: 18px 15px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border: 1px solid rgba(255, 77, 109, 0.1);
+        }
+
+        .upgrade-item i {
+            color: #ff4d6d;
+            font-size: 1.4rem;
+            min-width: 30px;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #f0f0f0;
+            border-radius: 12px;
+            margin: 25px 0;
+            overflow: hidden;
+            height: 22px;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ff4d6d, #ff8fa3);
+            border-radius: 12px;
+            transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Floating hearts optimized for performance */
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff4d6d;
+            font-size: 28px;
+            opacity: 0;
+            will-change: transform, opacity;
+            animation: floatUp 5s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 1;
+            }
+
+            90% {
+                opacity: 1;
+            }
+
+            100% {
+                transform: translateY(-100px) translateX(20px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* Counter styling */
+        .counter {
+            font-size: 1.1rem;
+            margin-top: 20px;
+            color: #ff4d6d;
+            font-weight: 700;
+            background: #fff5f7;
+            padding: 12px 24px;
+            border-radius: 50px;
+            display: inline-block;
+            border: 2px solid rgba(255, 77, 109, 0.2);
+        }
+
+        .footer {
+            color: white;
+            text-align: center;
+            margin-top: auto;
+            margin-bottom: max(20px, env(safe-area-inset-bottom));
+            font-size: 0.85rem;
+            opacity: 0.9;
+            padding: 10px;
+            width: 100%;
+        }
+
+        /* Emoji decorations */
+        .emoji-decoration {
+            position: absolute;
+            font-size: 2.2rem;
+            z-index: 2;
+            opacity: 0.8;
+            animation: float 4s ease-in-out infinite;
+            user-select: none;
+            pointer-events: none;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-25px) rotate(5deg);
+            }
+        }
+
+        /* Background overlay when final message shows */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Custom scrollbar for final message */
+        .final-message::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .final-message::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        .final-message::-webkit-scrollbar-thumb {
+            background: rgba(255, 77, 109, 0.3);
+            border-radius: 10px;
+        }
+
+        .final-message::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 77, 109, 0.5);
+        }
+
+        /* Responsive adjustments for scrolling */
+        @media (max-height: 700px) {
+            .final-message {
+                max-height: 75vh;
+                padding: 25px 20px;
+            }
+
+            .final-message h2 {
+                font-size: 1.8rem;
+                margin-bottom: 15px;
+            }
+
+            .upgrade-list {
+                margin: 20px 0;
+                gap: 12px;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .final-message {
+                max-height: 70vh;
+                padding: 20px 15px;
+            }
+
+            .progress-container {
+                margin: 15px 0;
+            }
+        }
+
+        /* iPhone landscape optimization */
+        @media (orientation: landscape) and (max-height: 430px) {
+            .container {
+                max-width: 100%;
+                flex-direction: row;
+                justify-content: center;
+                align-items: flex-start;
+                padding-top: 40px;
+            }
+
+            .card {
+                max-width: 350px;
+                margin-top: 0;
+            }
+
+            .footer {
+                display: none;
+            }
+
+            .final-message {
+                max-height: 80vh;
+                width: calc(100% - 60px);
+            }
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #d6336c 0%, #c2255c 100%);
+            }
+
+            .card {
+                background: rgba(40, 40, 40, 0.95);
+                color: #ffffff;
+            }
+
+            p {
+                color: #e0e0e0;
+            }
+
+            #noBtn {
+                background: #2d2d2d;
+                color: #b0b0b0;
+                border-color: #404040;
+            }
+
+            .upgrade-item {
+                background: #2d2d2d;
+            }
+
+            .final-message::-webkit-scrollbar-thumb {
+                background: rgba(255, 77, 109, 0.5);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Overlay for background when final message shows -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Decorative emojis -->
+    <div class="emoji-decoration" style="top: 12%; left: 8%;">😅</div>
+    <div class="emoji-decoration" style="top: 18%; right: 8%; animation-delay: 0.5s;">🤦‍♂️</div>
+    <div class="emoji-decoration" style="bottom: 25%; left: 10%; animation-delay: 1s;">🙏</div>
+    <div class="emoji-decoration" style="bottom: 20%; right: 6%; animation-delay: 1.5s;">😂</div>
+
+    <div class="container">
+        <div class="card" id="card">
+            <h1>Sorry My Queen </h1>
+
+            <p>Late? Yes 🕐</p>
+            <p>Sorry? Absolutely 😬</p>
+
+
+            <div class="buttons">
+                <button id="yesBtn">
+                    <i class="fas fa-heart-circle-check"></i> Yes, I Accept! 💖
+                </button>
+                <button id="noBtn">
+                    <i class="fas fa-ban"></i> Still Mad 😤
+                </button>
+            </div>
+
+            <div class="counter">
+                <span id="clickCount">0</span> attempts made
+            </div>
+        </div>
+
+    </div>
+
+    <div class="final-message" id="finalMessage">
+        <h2><i class="fas fa-party-horn"></i> Crisis Averted! 🎉</h2>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="upgrade-list">
+            <div class="upgrade-item">
+                <i class="fas fa-brain"></i>
+                <div>
+                    <strong>Better Judgment</strong><br>
+                    Successfully treated (finally!)
+                </div>
+            </div>
+            <div class="upgrade-item">
+                <i class="fas fa-heart"></i>
+                <div>
+                    <strong>Clueless Mode</strong><br>
+                    Deactivated (better late than never)
+                </div>
+            </div>
+            <div class="upgrade-item">
+                <i class="fas fa-clock"></i>
+                <div>
+                    <strong>Tact Filter</strong><br>
+                    Installed & functioning
+                </div>
+            </div>
+            <div class="upgrade-item">
+                <i class="fas fa-star"></i>
+                <div>
+                    <strong>Sweet Talk</strong><br>
+                    Installed 60.2%
+                </div>
+            </div>
+            <!-- Added more content to make it scrollable -->
+
+        </div>
+
+        <p style="margin: 25px 0; font-size: 1.2rem; line-height: 1.6;">
+            <!-- ✅ <strong>Forgiveness successfully installed!</strong><br> -->
+
+        </p>
+
+        <div
+            style="background: rgba(255, 77, 109, 0.1); padding: 18px; border-radius: 18px; margin: 20px 0; border: 1px solid rgba(255, 77, 109, 0.2);">
+            <p style="margin: 0; font-style: italic; color: #555;">
+                "Thanks for not blocking me! 😅<br>
+                Future responses: 70.9% faster ⚡"
+            </p>
+        </div>
+
+        <!-- More content to ensure scrolling works -->
+        <div
+            style="background: linear-gradient(135deg, #ff4d6d20, #ff8fa320); padding: 15px; border-radius: 15px; margin: 15px 0;">
+            <h3 style="color: #ff4d6d; margin-bottom: 10px;">✨ New Features Unlocked:</h3>
+            <ul style="text-align: left; padding-left: 20px; color: #555;">
+                <li>✅ Instant apology generator</li>
+                <li>✅ Memory upgrade for important dates</li>
+                <li>✅ 24/7 attention mode</li>
+                <li>✅ Unlimited compliments per day</li>
+
+            </ul>
+        </div>
+
+        <p style="margin: 15px 0; color: #666; font-size: 0.9rem;">
+            <i class="fas fa-shield-alt"></i> Warranty: Lifetime guarantee against dumb behavior
+        </p>
+
+        <!-- <button id="restartBtn"
+            style="background: linear-gradient(to right, #36d1dc, #5b86e5); color: white; margin: 20px 0;">
+             <i class="fas fa-redo"></i> Send Another Apology -->
+        </button>
+    </div>
+
+    <div class="floating-hearts" id="floatingHearts"></div>
+
+    <script>
+        // DOM elements
+        const card = document.getElementById('card');
+        const yesBtn = document.getElementById('yesBtn');
+        const noBtn = document.getElementById('noBtn');
+        const finalMessage = document.getElementById('finalMessage');
+        const progressBar = document.getElementById('progressBar');
+        const restartBtn = document.getElementById('restartBtn');
+        const floatingHearts = document.getElementById('floatingHearts');
+        const clickCountElement = document.getElementById('clickCount');
+        const overlay = document.getElementById('overlay');
+
+        let clickCount = 0;
+        let noBtnTexts = [
+            "Nah, I'm still mad 😤",
+            "Try harder! 😏",
+            "You wish! 🙃",
+            "Not convinced yet! 🤨",
+            "My finger slipped! 🤪",
+            "Almost there! 😉",
+            "Getting warmer! 🔥",
+            "One more try? 🫣",
+            "You're persistent! 😅",
+            "Okay fine! 🏳️"
+        ];
+        let currentTextIndex = 0;
+        let isFinalMessageOpen = false;
+
+        // Prevent body scrolling when final message is open
+        function preventBodyScroll(prevent) {
+            if (prevent) {
+                document.body.style.overflow = 'hidden';
+                document.body.style.position = 'fixed';
+                document.body.style.width = '100%';
+            } else {
+                document.body.style.overflow = '';
+                document.body.style.position = '';
+                document.body.style.width = '';
+                // Scroll to top when closing
+                window.scrollTo(0, 0);
+            }
+        }
+
+        // iPhone vibration simulation
+        function vibrate() {
+            if (navigator.vibrate) {
+                navigator.vibrate(50);
+            }
+        }
+
+        // Create floating hearts optimized for mobile
+        function createFloatingHearts() {
+            for (let i = 0; i < 8; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('heart');
+                    const hearts = ['❤️', '💖', '💗', '💓', '💞'];
+                    heart.innerHTML = hearts[Math.floor(Math.random() * hearts.length)];
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDelay = Math.random() * 3 + 's';
+                    heart.style.fontSize = (Math.random() * 15 + 20) + 'px';
+                    heart.style.color = `hsl(${Math.random() * 30 + 330}, 100%, 65%)`;
+                    floatingHearts.appendChild(heart);
+
+                    setTimeout(() => {
+                        if (heart.parentNode) heart.remove();
+                    }, 5000);
+                }, i * 300);
+            }
+        }
+
+        // Start hearts animation
+        setInterval(createFloatingHearts, 4000);
+        createFloatingHearts();
+
+        // No button interaction
+        noBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            handleNoButton();
+        });
+
+        noBtn.addEventListener('mouseover', handleNoButton);
+
+        function handleNoButton() {
+            const cardRect = card.getBoundingClientRect();
+            const maxX = cardRect.width - noBtn.offsetWidth - 30;
+            const maxY = cardRect.height - noBtn.offsetHeight - 30;
+
+            noBtn.style.position = 'absolute';
+            noBtn.style.left = Math.random() * maxX + 'px';
+            noBtn.style.top = Math.random() * maxY + 'px';
+
+            clickCount++;
+            clickCountElement.textContent = clickCount;
+
+            if (currentTextIndex < noBtnTexts.length) {
+                noBtn.innerHTML = `<i class="fas fa-ban"></i> ${noBtnTexts[currentTextIndex]}`;
+                currentTextIndex++;
+            } else {
+                const randomIndex = Math.floor(Math.random() * noBtnTexts.length);
+                noBtn.innerHTML = `<i class="fas fa-ban"></i> ${noBtnTexts[randomIndex]}`;
+            }
+
+            vibrate();
+
+            card.style.transform = 'scale(0.98)';
+            setTimeout(() => { card.style.transform = 'scale(1)'; }, 200);
+
+            createFunnyEffect(noBtn);
+        }
+
+        function createFunnyEffect(element) {
+            const emojis = ['🤪', '😜', '😂', '🙃', '😅', '🥴', '🤡', '👻'];
+            const randomEmoji = emojis[Math.floor(Math.random() * emojis.length)];
+            const effect = document.createElement('div');
+            effect.style.position = 'absolute';
+            effect.style.left = '50%';
+            effect.style.top = '50%';
+            effect.style.fontSize = '35px';
+            effect.style.transform = 'translate(-50%, -50%)';
+            effect.style.zIndex = '5';
+            effect.style.animation = 'pop 0.6s forwards';
+            effect.innerHTML = randomEmoji;
+            element.parentElement.appendChild(effect);
+            setTimeout(() => {
+                if (effect.parentNode) effect.remove();
+            }, 600);
+        }
+
+        // Add pop animation
+        const style = document.createElement('style');
+        style.innerHTML = `
+            @keyframes pop {
+                0% { transform: translate(-50%, -50%) scale(0); opacity: 1; }
+                50% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+                100% { transform: translate(-50%, -50%) scale(1); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Yes button click
+        yesBtn.addEventListener('click', () => {
+            if (isFinalMessageOpen) return;
+            showFinalMessage();
+        });
+
+        yesBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            if (isFinalMessageOpen) return;
+            showFinalMessage();
+        });
+
+        function showFinalMessage() {
+            isFinalMessageOpen = true;
+
+            // Prevent body scrolling
+            preventBodyScroll(true);
+
+            yesBtn.style.transform = 'scale(0.95)';
+            yesBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Installing...';
+            vibrate();
+
+            // Show overlay first
+            overlay.classList.add('show');
+
+            setTimeout(() => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(40px) scale(0.95)';
+
+                setTimeout(() => {
+                    card.style.display = 'none';
+                    finalMessage.classList.add('show');
+                    vibrate();
+
+                    // Start progress bar
+                    let progress = 0;
+                    const progressTexts = [
+                        "Clearing cache...",
+                        "Installing charm...",
+                        "Updating brain.exe...",
+                        "Loading sincerity...",
+                        "Finalizing upgrade..."
+                    ];
+
+                    const interval = setInterval(() => {
+                        progress += 20;
+                        progressBar.style.width = `${progress}%`;
+
+                        if (progress % 40 === 0) {
+                            const textIndex = Math.floor(progress / 40) - 1;
+                            if (textIndex >= 0 && textIndex < progressTexts.length) {
+                                progressBar.setAttribute('title', progressTexts[textIndex]);
+                            }
+                        }
+
+                        if (progress >= 100) {
+                            clearInterval(interval);
+                            setTimeout(() => {
+                                startConfetti();
+                                vibrate();
+                            }, 300);
+                        }
+                    }, 300);
+                }, 500);
+            }, 600);
+        }
+
+        // Confetti optimized for mobile
+        function startConfetti() {
+            const colors = ['#ff4d6d', '#ff8fa3', '#ff758c', '#ffb3c1'];
+            const confettiCount = 80;
+
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.classList.add('confetti');
+
+                    if (Math.random() > 0.5) {
+                        const emojis = ['🎉', '🎊', '💖', '✅', '✨'];
+                        confetti.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                        confetti.style.fontSize = (Math.random() * 15 + 12) + 'px';
+                    } else {
+                        confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                        confetti.style.borderRadius = '50%';
+                        confetti.style.width = (Math.random() * 10 + 6) + 'px';
+                        confetti.style.height = (Math.random() * 10 + 6) + 'px';
+                    }
+
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = '-20px';
+                    const animationDuration = Math.random() * 2 + 1.5;
+                    const animationDelay = Math.random() * 1;
+
+                    confetti.style.animation = `fall ${animationDuration}s linear ${animationDelay}s forwards`;
+                    document.body.appendChild(confetti);
+
+                    setTimeout(() => {
+                        if (confetti.parentNode) confetti.remove();
+                    }, (animationDuration + animationDelay) * 1000);
+                }, i * 25);
+            }
+
+            if (!document.getElementById('confetti-fall')) {
+                const fallStyle = document.createElement('style');
+                fallStyle.id = 'confetti-fall';
+                fallStyle.innerHTML = `
+                    @keyframes fall {
+                        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+                        100% { transform: translateY(100vh) rotate(180deg); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(fallStyle);
+            }
+        }
+
+        // Restart button - FIXED: Allow body scrolling again
+        restartBtn.addEventListener('click', restartAnimation);
+        restartBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            restartAnimation();
+        });
+
+        function restartAnimation() {
+            isFinalMessageOpen = false;
+            vibrate();
+
+            // Hide final message and overlay
+            finalMessage.style.transform = 'translate(-50%, -50%) scale(0.8)';
+            finalMessage.style.opacity = '0';
+            overlay.classList.remove('show');
+
+            setTimeout(() => {
+                finalMessage.classList.remove('show');
+                finalMessage.style.transform = '';
+                finalMessage.style.opacity = '';
+
+                // Allow body scrolling again
+                preventBodyScroll(false);
+
+                // Reset to main card
+                card.style.display = 'block';
+
+                setTimeout(() => {
+                    card.style.opacity = '1';
+                    card.style.transform = 'scale(1)';
+
+                    // Reset progress bar
+                    progressBar.style.width = '0%';
+
+                    // Reset yes button
+                    yesBtn.style.transform = 'scale(1)';
+                    yesBtn.innerHTML = '<i class="fas fa-heart-circle-check"></i> Yes, I Accept! 💖';
+
+                    // Reset no button
+                    noBtn.style.position = 'static';
+                    noBtn.style.left = '';
+                    noBtn.style.top = '';
+                    noBtn.innerHTML = '<i class="fas fa-ban"></i> Still Mad 😤';
+
+                    // Reset counters
+                    currentTextIndex = 0;
+                    clickCount = 0;
+                    clickCountElement.textContent = clickCount;
+
+                    // Scroll to top
+                    window.scrollTo(0, 0);
+                }, 50);
+            }, 400);
+        }
+
+        // Close final message when clicking overlay
+        overlay.addEventListener('click', () => {
+            if (isFinalMessageOpen) {
+                restartAnimation();
+            }
+        });
+
+        // Prevent final message from closing when clicking inside it
+        finalMessage.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+
+        // iPhone specific optimizations
+        document.addEventListener('DOMContentLoaded', () => {
+            createFloatingHearts();
+
+            // Dynamic title changes
+            let funnyTitles = [
+                "Late, but Here! 😅",
+                "Apology Loading... ⏳",
+                "Better Late Than Never! 🥺",
+                "SOS: Help Me! 🆘",
+                "Queen's Mercy? 👑"
+            ];
+            let titleIndex = 0;
+
+            setInterval(() => {
+                document.title = funnyTitles[titleIndex];
+                titleIndex = (titleIndex + 1) % funnyTitles.length;
+            }, 2500);
+
+            // Prevent zoom on double tap
+            document.addEventListener('touchstart', (e) => {
+                if (e.touches.length > 1) {
+                    e.preventDefault();
+                }
+            }, { passive: false });
+
+            // Prevent text selection
+            document.addEventListener('selectstart', (e) => {
+                e.preventDefault();
+            });
+        });
+
+        // Handle iOS keyboard appearance
+        window.addEventListener('resize', () => {
+            if (!isFinalMessageOpen) {
+                setTimeout(() => {
+                    window.scrollTo(0, 0);
+                }, 100);
+            }
+        });
+
+        // Ensure scrolling works in final message
+        finalMessage.addEventListener('touchmove', (e) => {
+            // Allow natural scrolling within the final message
+            e.stopPropagation();
+        }, { passive: true });
+
+        // Prevent body scroll when touching final message edges
+        document.addEventListener('touchmove', (e) => {
+            if (isFinalMessageOpen) {
+
+                const finalMsg = finalMessage;
+                const isAtTop = finalMsg.scrollTop === 0;
+                const isAtBottom = finalMsg.scrollTop + finalMsg.clientHeight >= finalMsg.scrollHeight - 1;
+
+                if ((isAtTop && e.touches[0].clientY > e.touches[0].initialClientY) ||
+                    (isAtBottom && e.touches[0].clientY < e.touches[0].initialClientY)) {
+                    e.preventDefault();
+                }
+            }
+        }, { passive: false });
+    </script>
+</body>
+
+</html>
